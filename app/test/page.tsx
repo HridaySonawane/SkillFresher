@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/auth";
 
 export default function TestProfile() {
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState<{ data: any; error: any } | null>(null);
 
   useEffect(() => {
     async function fetchProfile() {

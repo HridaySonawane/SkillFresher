@@ -7,11 +7,13 @@ export default async function PDFPreviewPage({
   searchParams,
 }: {
   params: Promise<{ resumeId: string }>;
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { resumeId } = await params;
+  const resolvedSearchParams = await searchParams;
+
   const resumeData = await fetchResumeDataById(resumeId);
-  const isPdf = searchParams?.pdf === "1";
+  const isPdf = resolvedSearchParams?.pdf === "1";
 
   return (
     <div style={{ background: "#fff", minHeight: "100vh" }}>

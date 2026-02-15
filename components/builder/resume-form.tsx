@@ -4,8 +4,6 @@
 import {
   useState,
   useEffect,
-  Key,
-  Key,
   JSXElementConstructor,
   Key,
   ReactElement,
@@ -310,7 +308,7 @@ export function ResumeForm({ data, onDataChange }: ResumeFormProps) {
                     endDate: string | number | readonly string[] | undefined;
                     description: any[];
                   },
-                  index: Key | null | undefined,
+                  index: number,
                 ) => (
                   <div key={index} className="space-y-4 p-4 border rounded-lg">
                     <div className="flex items-center justify-between">
@@ -430,7 +428,7 @@ export function ResumeForm({ data, onDataChange }: ResumeFormProps) {
                       | readonly string[]
                       | undefined;
                   },
-                  index: Key | null | undefined,
+                  index: number,
                 ) => (
                   <div key={index} className="space-y-4 p-4 border rounded-lg">
                     <div className="flex items-center justify-between">

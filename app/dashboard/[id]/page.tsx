@@ -12,6 +12,7 @@ import { RecentResumes } from "@/components/dashboard/recent-resumes";
 import { UsageOverview } from "@/components/dashboard/usage-overview";
 import { SubscriptionCard } from "@/components/dashboard/subscription-card";
 import { supabase } from "@/lib/supabase/auth";
+import type { User } from "@supabase/supabase-js";
 
 interface Subscription {
   plan_id: string;
@@ -46,7 +47,7 @@ export default function DashboardPage() {
   const success = searchParams.get("success");
   // const sessionId = searchParams.get("session_id");
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {

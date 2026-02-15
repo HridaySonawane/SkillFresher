@@ -61,7 +61,7 @@ export function TemplateSelection({
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showPremiumOnly, setShowPremiumOnly] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
-  const [templates, setTemplates] = useState([]);
+  const [templates, setTemplates] = useState<any[]>([]);
 
   useEffect(() => {
     fetch("/api/templates")
