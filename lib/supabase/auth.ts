@@ -4,6 +4,14 @@ import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs"
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
+// Get the redirect origin - use environment variable in production, window.location in dev
+const getRedirectOrigin = () => {
+  if (typeof window === "undefined") {
+    return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+  }
+  return process.env.NEXT_PUBLIC_APP_URL || window.location.origin
+}
+
 export const supabase = createPagesBrowserClient({
   supabaseUrl,
   supabaseKey,
@@ -17,7 +25,7 @@ export const authService = {
       email,
       options: {
         shouldCreateUser: true,
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${getRedirectOrigin()}/auth/callback`,
       },
     })
     if (error) throw error
@@ -52,7 +60,7 @@ export const authService = {
       password,
       options: {
         data: userData,
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${getRedirectOrigin()}/auth/callback`,
       },
     })
     if (error) throw error
@@ -76,7 +84,7 @@ export const authService = {
       email,
       options: {
         shouldCreateUser: true,
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${getRedirectOrigin()}/auth/callback`,
       },
     })
     if (error) throw error
