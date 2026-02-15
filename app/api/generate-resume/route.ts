@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
     const launchOptions: any = {
       headless: true,
       args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
+      defaultViewport: { width: 1280, height: 720 },
     };
 
     if (process.env.PUPPETEER_EXECUTABLE_PATH) {
