@@ -1,41 +1,62 @@
-"use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { Plus, Trash2, Edit, User, Briefcase, GraduationCap, Star, FolderOpen } from "lucide-react"
-import type { ResumeData } from "@/lib/document-generators/types"
+import {
+  useState,
+  useEffect,
+  Key,
+  Key,
+  JSXElementConstructor,
+  Key,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+} from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import {
+  Plus,
+  Trash2,
+  User,
+  Briefcase,
+  GraduationCap,
+  Star,
+  FolderOpen,
+} from "lucide-react";
+import type { ResumeData } from "@/lib/document-generators/types";
 
 interface ResumeFormProps {
-  data: ResumeData
-  onDataChange: (data: ResumeData) => void
-  templateId: string
+  data: ResumeData;
+  onDataChange: (data: ResumeData) => void;
+  templateId: string;
 }
 
-export function ResumeForm({ data, onDataChange, templateId }: ResumeFormProps) {
-  const [activeSection, setActiveSection] = useState("personal")
+export function ResumeForm({ data, onDataChange }: ResumeFormProps) {
+  const [activeSection, setActiveSection] = useState("personal");
 
-  const updatePersonalInfo = (field: keyof ResumeData["personalInfo"], value: string) => {
+  const updatePersonalInfo = (
+    field: keyof ResumeData["personalInfo"],
+    value: string,
+  ) => {
     onDataChange({
       ...data,
       personalInfo: {
         ...data.personalInfo,
         [field]: value,
       },
-    })
-  }
+    });
+  };
 
   const updateSummary = (value: string) => {
     onDataChange({
       ...data,
       summary: value,
-    })
-  }
+    });
+  };
 
   const addExperience = () => {
     onDataChange({
@@ -50,27 +71,31 @@ export function ResumeForm({ data, onDataChange, templateId }: ResumeFormProps) 
           description: [""],
         },
       ],
-    })
-  }
+    });
+  };
 
-  const updateExperience = (index: number, field: string, value: string | string[]) => {
-    const newExperience = [...data.experience]
+  const updateExperience = (
+    index: number,
+    field: string,
+    value: string | string[],
+  ) => {
+    const newExperience = [...data.experience];
     newExperience[index] = {
       ...newExperience[index],
       [field]: value,
-    }
+    };
     onDataChange({
       ...data,
       experience: newExperience,
-    })
-  }
+    });
+  };
 
   const removeExperience = (index: number) => {
     onDataChange({
       ...data,
-      experience: data.experience.filter((_, i) => i !== index),
-    })
-  }
+      experience: data.experience.filter((_: any, i: number) => i !== index),
+    });
+  };
 
   const addEducation = () => {
     onDataChange({
@@ -83,34 +108,37 @@ export function ResumeForm({ data, onDataChange, templateId }: ResumeFormProps) 
           graduationDate: "",
         },
       ],
-    })
-  }
+    });
+  };
 
   const updateEducation = (index: number, field: string, value: string) => {
-    const newEducation = [...data.education]
+    const newEducation = [...data.education];
     newEducation[index] = {
       ...newEducation[index],
       [field]: value,
-    }
+    };
     onDataChange({
       ...data,
       education: newEducation,
-    })
-  }
+    });
+  };
 
   const removeEducation = (index: number) => {
     onDataChange({
       ...data,
-      education: data.education.filter((_, i) => i !== index),
-    })
-  }
+      education: data.education.filter((_: any, i: number) => i !== index),
+    });
+  };
 
   const updateSkills = (value: string) => {
     onDataChange({
       ...data,
-      skills: value.split(",").map((skill) => skill.trim()).filter(Boolean),
-    })
-  }
+      skills: value
+        .split(",")
+        .map((skill) => skill.trim())
+        .filter(Boolean),
+    });
+  };
 
   const [skillsInput, setSkillsInput] = useState(data.skills.join(", "));
 
@@ -124,7 +152,7 @@ export function ResumeForm({ data, onDataChange, templateId }: ResumeFormProps) 
     { id: "experience", label: "Experience", icon: Briefcase },
     { id: "education", label: "Education", icon: GraduationCap },
     { id: "skills", label: "Skills", icon: FolderOpen },
-  ]
+  ];
 
   return (
     <div className="h-full overflow-y-auto p-6">
@@ -132,7 +160,7 @@ export function ResumeForm({ data, onDataChange, templateId }: ResumeFormProps) 
         {/* Navigation */}
         <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
           {sections.map((section) => {
-            const Icon = section.icon
+            const Icon = section.icon;
             return (
               <Button
                 key={section.id}
@@ -144,7 +172,7 @@ export function ResumeForm({ data, onDataChange, templateId }: ResumeFormProps) 
                 <Icon className="w-4 h-4 mr-2" />
                 {section.label}
               </Button>
-            )
+            );
           })}
         </div>
 
@@ -174,7 +202,9 @@ export function ResumeForm({ data, onDataChange, templateId }: ResumeFormProps) 
                     id="email"
                     type="email"
                     value={data.personalInfo.email}
-                    onChange={(e) => updatePersonalInfo("email", e.target.value)}
+                    onChange={(e) =>
+                      updatePersonalInfo("email", e.target.value)
+                    }
                     placeholder="john@example.com"
                   />
                 </div>
@@ -185,7 +215,9 @@ export function ResumeForm({ data, onDataChange, templateId }: ResumeFormProps) 
                   <Input
                     id="phone"
                     value={data.personalInfo.phone}
-                    onChange={(e) => updatePersonalInfo("phone", e.target.value)}
+                    onChange={(e) =>
+                      updatePersonalInfo("phone", e.target.value)
+                    }
                     placeholder="+1 (555) 123-4567"
                   />
                 </div>
@@ -194,7 +226,9 @@ export function ResumeForm({ data, onDataChange, templateId }: ResumeFormProps) 
                   <Input
                     id="location"
                     value={data.personalInfo.location}
-                    onChange={(e) => updatePersonalInfo("location", e.target.value)}
+                    onChange={(e) =>
+                      updatePersonalInfo("location", e.target.value)
+                    }
                     placeholder="San Francisco, CA"
                   />
                 </div>
@@ -205,7 +239,9 @@ export function ResumeForm({ data, onDataChange, templateId }: ResumeFormProps) 
                   <Input
                     id="linkedin"
                     value={data.personalInfo.linkedin || ""}
-                    onChange={(e) => updatePersonalInfo("linkedin", e.target.value)}
+                    onChange={(e) =>
+                      updatePersonalInfo("linkedin", e.target.value)
+                    }
                     placeholder="linkedin.com/in/johndoe"
                   />
                 </div>
@@ -214,7 +250,9 @@ export function ResumeForm({ data, onDataChange, templateId }: ResumeFormProps) 
                   <Input
                     id="website"
                     value={data.personalInfo.website || ""}
-                    onChange={(e) => updatePersonalInfo("website", e.target.value)}
+                    onChange={(e) =>
+                      updatePersonalInfo("website", e.target.value)
+                    }
                     placeholder="johndoe.com"
                   />
                 </div>
@@ -263,65 +301,90 @@ export function ResumeForm({ data, onDataChange, templateId }: ResumeFormProps) 
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              {data.experience.map((exp, index) => (
-                <div key={index} className="space-y-4 p-4 border rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-medium">Experience {index + 1}</h4>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeExperience(index)}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label>Position</Label>
-                      <Input
-                        value={exp.position}
-                        onChange={(e) => updateExperience(index, "position", e.target.value)}
-                        placeholder="Software Engineer"
-                      />
+              {data.experience.map(
+                (
+                  exp: {
+                    position: string | number | readonly string[] | undefined;
+                    company: string | number | readonly string[] | undefined;
+                    startDate: string | number | readonly string[] | undefined;
+                    endDate: string | number | readonly string[] | undefined;
+                    description: any[];
+                  },
+                  index: Key | null | undefined,
+                ) => (
+                  <div key={index} className="space-y-4 p-4 border rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-medium">Experience {index + 1}</h4>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeExperience(index)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Position</Label>
+                        <Input
+                          value={exp.position}
+                          onChange={(e) =>
+                            updateExperience(index, "position", e.target.value)
+                          }
+                          placeholder="Software Engineer"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Company</Label>
+                        <Input
+                          value={exp.company}
+                          onChange={(e) =>
+                            updateExperience(index, "company", e.target.value)
+                          }
+                          placeholder="Tech Corp"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Start Date</Label>
+                        <Input
+                          value={exp.startDate}
+                          onChange={(e) =>
+                            updateExperience(index, "startDate", e.target.value)
+                          }
+                          placeholder="Jan 2020"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>End Date</Label>
+                        <Input
+                          value={exp.endDate}
+                          onChange={(e) =>
+                            updateExperience(index, "endDate", e.target.value)
+                          }
+                          placeholder="Present"
+                        />
+                      </div>
                     </div>
                     <div className="space-y-2">
-                      <Label>Company</Label>
-                      <Input
-                        value={exp.company}
-                        onChange={(e) => updateExperience(index, "company", e.target.value)}
-                        placeholder="Tech Corp"
+                      <Label>Description</Label>
+                      <Textarea
+                        value={exp.description.join("\n")}
+                        onChange={(e) =>
+                          updateExperience(
+                            index,
+                            "description",
+                            e.target.value.split("\n"),
+                          )
+                        }
+                        placeholder="• Led development of key features..."
+                        rows={4}
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label>Start Date</Label>
-                      <Input
-                        value={exp.startDate}
-                        onChange={(e) => updateExperience(index, "startDate", e.target.value)}
-                        placeholder="Jan 2020"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>End Date</Label>
-                      <Input
-                        value={exp.endDate}
-                        onChange={(e) => updateExperience(index, "endDate", e.target.value)}
-                        placeholder="Present"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Description</Label>
-                    <Textarea
-                      value={exp.description.join("\n")}
-                      onChange={(e) => updateExperience(index, "description", e.target.value.split("\n"))}
-                      placeholder="• Led development of key features..."
-                      rows={4}
-                    />
-                  </div>
-                </div>
-              ))}
+                ),
+              )}
               {data.experience.length === 0 && (
                 <div className="text-center py-8 text-gray-500">
                   <Briefcase className="w-12 h-12 mx-auto mb-4 text-gray-300" />
@@ -352,46 +415,77 @@ export function ResumeForm({ data, onDataChange, templateId }: ResumeFormProps) 
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              {data.education.map((edu, index) => (
-                <div key={index} className="space-y-4 p-4 border rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-medium">Education {index + 1}</h4>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeEducation(index)}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label>Degree</Label>
-                      <Input
-                        value={edu.degree}
-                        onChange={(e) => updateEducation(index, "degree", e.target.value)}
-                        placeholder="Bachelor of Science"
-                      />
+              {data.education.map(
+                (
+                  edu: {
+                    degree: string | number | readonly string[] | undefined;
+                    institution:
+                      | string
+                      | number
+                      | readonly string[]
+                      | undefined;
+                    graduationDate:
+                      | string
+                      | number
+                      | readonly string[]
+                      | undefined;
+                  },
+                  index: Key | null | undefined,
+                ) => (
+                  <div key={index} className="space-y-4 p-4 border rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-medium">Education {index + 1}</h4>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeEducation(index)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Degree</Label>
+                        <Input
+                          value={edu.degree}
+                          onChange={(e) =>
+                            updateEducation(index, "degree", e.target.value)
+                          }
+                          placeholder="Bachelor of Science"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Institution</Label>
+                        <Input
+                          value={edu.institution}
+                          onChange={(e) =>
+                            updateEducation(
+                              index,
+                              "institution",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="University of Technology"
+                        />
+                      </div>
                     </div>
                     <div className="space-y-2">
-                      <Label>Institution</Label>
+                      <Label>Graduation Date</Label>
                       <Input
-                        value={edu.institution}
-                        onChange={(e) => updateEducation(index, "institution", e.target.value)}
-                        placeholder="University of Technology"
+                        value={edu.graduationDate}
+                        onChange={(e) =>
+                          updateEducation(
+                            index,
+                            "graduationDate",
+                            e.target.value,
+                          )
+                        }
+                        placeholder="May 2020"
                       />
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label>Graduation Date</Label>
-                    <Input
-                      value={edu.graduationDate}
-                      onChange={(e) => updateEducation(index, "graduationDate", e.target.value)}
-                      placeholder="May 2020"
-                    />
-                  </div>
-                </div>
-              ))}
+                ),
+              )}
               {data.education.length === 0 && (
                 <div className="text-center py-8 text-gray-500">
                   <GraduationCap className="w-12 h-12 mx-auto mb-4 text-gray-300" />
@@ -434,11 +528,42 @@ export function ResumeForm({ data, onDataChange, templateId }: ResumeFormProps) 
                 <div className="mt-4">
                   <Label>Skills Preview</Label>
                   <div className="flex flex-wrap gap-2 mt-2">
-                    {data.skills.map((skill, index) => (
-                      <Badge key={index} variant="secondary">
-                        {skill}
-                      </Badge>
-                    ))}
+                    {data.skills.map(
+                      (
+                        skill:
+                          | string
+                          | number
+                          | bigint
+                          | boolean
+                          | ReactElement<
+                              unknown,
+                              string | JSXElementConstructor<any>
+                            >
+                          | Iterable<ReactNode>
+                          | ReactPortal
+                          | Promise<
+                              | string
+                              | number
+                              | bigint
+                              | boolean
+                              | ReactPortal
+                              | ReactElement<
+                                  unknown,
+                                  string | JSXElementConstructor<any>
+                                >
+                              | Iterable<ReactNode>
+                              | null
+                              | undefined
+                            >
+                          | null
+                          | undefined,
+                        index: Key | null | undefined,
+                      ) => (
+                        <Badge key={index} variant="secondary">
+                          {skill}
+                        </Badge>
+                      ),
+                    )}
                   </div>
                 </div>
               )}
@@ -447,5 +572,5 @@ export function ResumeForm({ data, onDataChange, templateId }: ResumeFormProps) 
         )}
       </div>
     </div>
-  )
-} 
+  );
+}

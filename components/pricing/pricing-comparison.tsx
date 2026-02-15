@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Check, X } from "lucide-react";
 
 import {
@@ -211,7 +211,7 @@ export function PricingComparison() {
 						Compare all features
 					</h2>
 					<p className="text-xl text-gray-600 dark:text-gray-400">
-						See exactly what's included in each plan
+						See exactly what&apos;s included in each plan
 					</p>
 				</div>
 

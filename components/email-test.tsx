@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState } from "react";
@@ -347,7 +349,7 @@ export function EmailTest() {
 
 						<div>
 							<h4 className="font-medium mb-2">
-								🔧 If Emails Don't Arrive:
+								🔧 If Emails Don&apos;t Arrive:
 							</h4>
 							<ul className="space-y-1 text-gray-600">
 								<li>• Check Supabase SMTP configuration</li>

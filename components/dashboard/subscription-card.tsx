@@ -24,7 +24,7 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
 				<CardContent className="space-y-4">
 					<div className="text-sm text-gray-600">
 						<p>
-							You're currently on the free plan with limited
+							You&apos;re currently on the free plan with limited
 							features.
 						</p>
 					</div>

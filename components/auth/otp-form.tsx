@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import type React from "react"
@@ -82,7 +83,7 @@ export function OTPForm({ email, onBack, onSuccess }: OTPFormProps) {
         </div>
         <CardTitle>Check your email</CardTitle>
         <CardDescription>
-          We've sent a 6-digit verification code to
+          We&apos;ve sent a 6-digit verification code to
           <br />
           <strong>{email}</strong>
         </CardDescription>
@@ -131,7 +132,7 @@ export function OTPForm({ email, onBack, onSuccess }: OTPFormProps) {
         </form>
 
         <div className="text-center space-y-2">
-          <p className="text-sm text-gray-600">Didn't receive the code?</p>
+          <p className="text-sm text-gray-600">Didn&apos;t receive the code?</p>
           <Button
             variant="ghost"
             onClick={handleResendOTP}

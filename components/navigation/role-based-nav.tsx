@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -87,9 +88,11 @@ export function RoleBasedNavigation() {
 
   const getCurrentUser = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       setCurrentUser(user);
-      
+
       if (user) {
         const role = await RoleAuthService.getUserRole(user.id);
         setUserRole(role);
@@ -112,7 +115,7 @@ export function RoleBasedNavigation() {
 
   const getAccessibleItems = () => {
     if (!userRole) return [];
-    return navigationItems.filter(item => item.roles.includes(userRole));
+    return navigationItems.filter((item) => item.roles.includes(userRole));
   };
 
   const getRoleDisplayName = (role: UserRole) => {
@@ -159,7 +162,7 @@ export function RoleBasedNavigation() {
             <Link href="/dashboard" className="flex-shrink-0">
               <h1 className="text-xl font-bold text-gray-900">ResumeAI</h1>
             </Link>
-            
+
             <div className="hidden md:ml-6 md:flex md:space-x-8">
               {accessibleItems.map((item) => (
                 <Link
@@ -196,7 +199,7 @@ export function RoleBasedNavigation() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                
+
                 {userRole === "admin" && (
                   <>
                     <DropdownMenuItem asChild>
@@ -208,11 +211,14 @@ export function RoleBasedNavigation() {
                     <DropdownMenuSeparator />
                   </>
                 )}
-                
+
                 {userRole === "moderator" && (
                   <>
                     <DropdownMenuItem asChild>
-                      <Link href="/moderator/content" className="flex items-center">
+                      <Link
+                        href="/moderator/content"
+                        className="flex items-center"
+                      >
                         <Settings className="mr-2 h-4 w-4" />
                         Content Moderation
                       </Link>
@@ -220,11 +226,14 @@ export function RoleBasedNavigation() {
                     <DropdownMenuSeparator />
                   </>
                 )}
-                
+
                 {userRole === "premium_user" && (
                   <>
                     <DropdownMenuItem asChild>
-                      <Link href="/premium/templates" className="flex items-center">
+                      <Link
+                        href="/premium/templates"
+                        className="flex items-center"
+                      >
                         <Crown className="mr-2 h-4 w-4" />
                         Premium Templates
                       </Link>
@@ -232,21 +241,21 @@ export function RoleBasedNavigation() {
                     <DropdownMenuSeparator />
                   </>
                 )}
-                
+
                 <DropdownMenuItem asChild>
                   <Link href="/profile" className="flex items-center">
                     <User className="mr-2 h-4 w-4" />
                     Profile
                   </Link>
                 </DropdownMenuItem>
-                
+
                 <DropdownMenuItem asChild>
                   <Link href="/settings" className="flex items-center">
                     <Settings className="mr-2 h-4 w-4" />
                     Settings
                   </Link>
                 </DropdownMenuItem>
-                
+
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut}>
                   <span>Sign out</span>
@@ -258,4 +267,4 @@ export function RoleBasedNavigation() {
       </div>
     </nav>
   );
-} 
+}

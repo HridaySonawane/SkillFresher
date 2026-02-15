@@ -1,25 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Eye, Download, Star, Crown, Sparkles } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "../ui/dialog";
+import { Download, Star, Sparkles } from "lucide-react";
 
 export function ResumeGallery() {
-	const [selectedTemplate, setSelectedTemplate] = useState<string | null>(
-		null
-	);
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
 	const [resumes, setResumes] = useState<any[]>([]);

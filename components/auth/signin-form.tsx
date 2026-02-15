@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import type React from "react";
@@ -122,7 +123,7 @@ export function SignInForm() {
 						Check your email
 					</h3>
 					<p className="text-gray-600 mb-6">
-						We've sent a magic link to{" "}
+						We&apos;ve sent a magic link to{" "}
 						<strong>{formData.email}</strong>
 					</p>
 					<Button
@@ -331,7 +332,7 @@ export function SignInForm() {
 
 			{/* Sign Up Link */}
 			<div className="text-center mb-8">
-				<span className="text-gray-600">Don't have an account? </span>
+				<span className="text-gray-600">Don&apos;t have an account? </span>
 				<Link
 					href="/auth/signup"
 					className="text-blue-600 dark:text-blue-500 hover:underline font-medium"

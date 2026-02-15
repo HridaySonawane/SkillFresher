@@ -2,9 +2,9 @@
 
 import { SignInForm } from "@/components/auth/signin-form";
 import { AuthLayout } from "@/components/auth/auth-layout";
-import { useRouter } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useEffect } from "react";
+// import { useRouter } from "next/navigation";
+// import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+// import { useEffect } from "react";
 
 export default function SignInPage() {
 	// const router = useRouter();

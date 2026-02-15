@@ -1,21 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
 	FileText,
-	Settings,
-	Palette,
 	Download,
 	Share2,
 	Save,
 	Eye,
 	CheckCircle,
 } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import Image from "next/image";
 
 interface CreateResumeSidebarProps {
 	currentStep: "template" | "form" | "preview";
@@ -27,12 +24,9 @@ interface CreateResumeSidebarProps {
 
 export function CreateResumeSidebar({
 	currentStep,
-	selectedTemplate,
-	userId,
 	template,
 	loading,
 }: CreateResumeSidebarProps) {
-	const searchParams = useSearchParams();
 
 	const getProgress = () => {
 		switch (currentStep) {

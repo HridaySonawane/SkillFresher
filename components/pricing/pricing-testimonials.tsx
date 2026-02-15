@@ -62,7 +62,7 @@ export function PricingTestimonials() {
 								</div>
 
 								<p className="text-gray-700 dark:text-gray-500 mb-6 italic">
-									"{testimonial.text}"
+									&quot;{testimonial.text}&quot;
 								</p>
 
 								<div className="flex items-center gap-3">

@@ -220,7 +220,7 @@ export function PricingPlans() {
 
 								<div className="space-y-3">
 									<h4 className="font-semibold text-sm text-gray-900">
-										What's included:
+										What&apos;s included:
 									</h4>
 									{plan.features.map((feature, index) => (
 										<div

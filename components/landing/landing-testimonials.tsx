@@ -1,8 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { Key } from "lucide-react";
 
 export function LandingTestimonial() {
 	const testimonials = {
@@ -46,19 +43,19 @@ export function LandingTestimonial() {
 		],
 	};
 
-	const sliderVariant = {
-		initial: {
-			x: "50%",
-		},
-		animate: {
-			x: "-220%",
-			transition: {
-				duration: 50,
-				repeat: Infinity,
-				repeatType: "mirror" as const,
-			},
-		},
-	};
+	// const sliderVariant = {
+	// 	initial: {
+	// 		x: "50%",
+	// 	},
+	// 	animate: {
+	// 		x: "-220%",
+	// 		transition: {
+	// 			duration: 50,
+	// 			repeat: Infinity,
+	// 			repeatType: "mirror" as const,
+	// 		},
+	// 	},
+	// };
 
 	return (
 		<section id="pricing" className="py-12 px-4 sm:px-8 md:px-16 lg:px-20">
@@ -71,7 +68,7 @@ export function LandingTestimonial() {
 						<p className="text-center text-xs sm:text-sm italic text-gray-600 dark:text-gray-400">
 							We always love to hear from the users of Reactive
 							Resume with feedback or support. Here are some of
-							the messages we've received. If you have any
+							the messages we&apos;ve received. If you have any
 							feedback, feel free to drop us an email at
 							hello@amruthpillai.com.
 						</p>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -400,7 +401,7 @@ export function CheckoutForm({ plan, onStepChange }: CheckoutFormProps) {
 								Ready to Complete Your Purchase
 							</h3>
 							<p className="text-sm text-blue-800">
-								You'll be redirected to Stripe's secure payment
+								You&apos;ll be redirected to Stripe&apos;s secure payment
 								page to complete your subscription to the{" "}
 								<strong>{plan.name} plan</strong> for{" "}
 								<strong>

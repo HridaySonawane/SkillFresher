@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import type React from "react"
@@ -24,7 +26,6 @@ export function ResetPasswordForm() {
   const [success, setSuccess] = useState(false)
   const [passwordStrength, setPasswordStrength] = useState(0)
 
-  const searchParams = useSearchParams()
   const supabase = createClient()
 
   useEffect(() => {
@@ -109,7 +110,7 @@ export function ResetPasswordForm() {
           </div>
           <h3 className="text-xl font-semibold text-gray-900 mb-2">Password updated!</h3>
           <p className="text-gray-600 mb-6">
-            Your password has been successfully updated. You'll be redirected to sign in shortly.
+            Your password has been successfully updated. You&apos;ll be redirected to sign in shortly.
           </p>
         </CardContent>
       </Card>

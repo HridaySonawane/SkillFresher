@@ -92,7 +92,7 @@ export function UsageOverview({ usage, subscription }: UsageOverviewProps) {
 						{item.limit !== -1 &&
 							item.current >= item.limit * 0.8 && (
 								<p className="text-xs text-amber-600">
-									You're approaching your{" "}
+									You&apos;re approaching your{" "}
 									{item.label.toLowerCase()} limit
 								</p>
 							)}

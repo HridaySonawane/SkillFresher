@@ -1,7 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { link } from "fs";
 
 export function CheckoutHeader() {
 	return (

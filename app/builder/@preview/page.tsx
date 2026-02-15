@@ -1,12 +1,12 @@
 "use client"
 
 import { ResumePreview } from "@/components/builder/resume-preview"
-import { useSearchParams } from "next/navigation"
+// import { useSearchParams } from "next/navigation"
 import { useResumeBuilder } from "@/components/builder/resume-builder-context"
 
 export default function PreviewPage() {
-  const searchParams = useSearchParams()
-  const templateId = searchParams.get("template") || "modern-professional"
+  // const searchParams = useSearchParams()
+  // const templateId = searchParams.get("template") || "modern-professional"
   const { resumeData, templateId: contextTemplateId } = useResumeBuilder()
   
   return (

@@ -66,7 +66,7 @@ export function LandingFeatures() {
 					</h2>
 					<p className="text-xl text-gray-600 dark:text-gray-500 max-w-3xl mx-auto">
 						From AI-powered content suggestions to ATS optimization,
-						we've got all the tools you need to land your dream job.
+						we&apos;ve got all the tools you need to land your dream job.
 					</p>
 				</div>
 

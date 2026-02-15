@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence, delay, type Variants } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import {
-	Menu,
 	Home,
 	Film,
 	Music,

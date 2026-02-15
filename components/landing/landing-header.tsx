@@ -6,7 +6,6 @@ import { useState } from "react";
 import { ModeToggle } from "../themeChanger";
 // Removed framer-motion imports
 // import { motion, AnimatePresence, useAnimation } from "framer-motion";
-import { useEffect } from "react";
 
 export function LandingHeader() {
 	// Removed animation-related state

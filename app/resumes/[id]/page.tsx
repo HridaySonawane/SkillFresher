@@ -3,7 +3,6 @@
 import { ResumeGallery } from "@/components/resume/template-gallery";
 import { TemplateHeader } from "@/components/resume/template-header";
 import { TemplateFilters } from "@/components/resume/template-filters";
-import { TemplateCategories } from "@/components/resume/template-categories";
 import { useParams } from "next/navigation";
 
 export default function ResumePage() {

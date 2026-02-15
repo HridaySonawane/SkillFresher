@@ -1,5 +1,4 @@
 import { PricingHeader } from "@/components/pricing/pricing-header";
-import { PricingPlans } from "@/components/pricing/pricing-plans";
 import { PricingFAQ } from "@/components/pricing/pricing-faq";
 import { PricingComparison } from "@/components/pricing/pricing-comparison";
 import { PricingTestimonials } from "@/components/pricing/pricing-testimonials";

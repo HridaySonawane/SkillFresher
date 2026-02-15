@@ -77,7 +77,7 @@ export function OrderSummary({ plan }: OrderSummaryProps) {
 			{/* Features Card */}
 			<Card>
 				<CardHeader>
-					<CardTitle className="text-lg">What's Included</CardTitle>
+					<CardTitle className="text-lg">What&apos;s Included</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<ul className="space-y-3">

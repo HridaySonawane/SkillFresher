@@ -43,7 +43,7 @@ export function LandingHero() {
 									Version 2.0
 								</Badge>
 								<span className="text-sm text-gray-600 dark:text-gray-400">
-									What's new in the latest version
+									What&apos;s new in the latest version
 								</span>
 								<ArrowRight className="w-4 h-4 text-gray-400" />
 							</div>
