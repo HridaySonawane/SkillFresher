@@ -5,7 +5,6 @@ import { ResumeHeader } from "@/components/create-resume/resume-header";
 import { TemplateSelection } from "@/components/create-resume/template-selection";
 import { ResumeForm } from "@/components/create-resume/resume-form";
 import { ResumePreview } from "@/components/create-resume/resume-preview";
-import { CreateResumeSidebar } from "@/components/create-resume/create-resume-sidebar";
 import type { ResumeData } from "@/lib/document-generators/types";
 import { useTemplateData } from "@/hooks/use-template-data";
 import React, { useState } from "react";

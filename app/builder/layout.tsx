@@ -1,11 +1,9 @@
 import { Suspense } from "react";
 import { BuilderHeader } from "@/components/builder/builder-header";
 import { BuilderSidebar } from "@/components/builder/builder-sidebar";
-import { ResumeProvider } from "@/components/builder/resume-context";
 import { ResumeBuilderProvider } from "@/components/builder/resume-builder-context";
 
 export default function BuilderLayout({
-	children,
 	preview,
 	form,
 }: {
