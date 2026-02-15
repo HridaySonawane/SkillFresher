@@ -1,6 +1,9 @@
+export const runtime = "nodejs";
+
 import { NextRequest, NextResponse } from "next/server";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+import chromium from "@sparticuz/chromium";
 // don't use next/headers here; build a request-scoped cookies wrapper below
 
 export async function GET(request: NextRequest) {
@@ -55,8 +58,39 @@ export async function GET(request: NextRequest) {
       .map((p) => ({ name: p.name, value: p.value, path: "/" }))
       .filter((c) => c.name && c.value);
 
-    // 4. Launch Puppeteer and set cookies
-    const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
+    // 4. Launch Puppeteer and set cookies (use puppeteer-core + @sparticuz/chromium on Vercel)
+    const launchOptions: any = {
+      headless: true,
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+    };
+
+    if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+      launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+    } else {
+      try {
+        launchOptions.executablePath = await chromium.executablePath();
+      } catch (e) {
+        console.warn("Could not resolve chromium.executablePath():", e);
+      }
+    }
+
+    let browser;
+    try {
+      browser = await puppeteer.launch(launchOptions);
+    } catch (err: any) {
+      console.error("Puppeteer launch failed:", err?.message || err);
+      if (err?.message && err.message.includes("Could not find Chrome")) {
+        return NextResponse.json(
+          {
+            error:
+              "Chromium not found. On Vercel install @sparticuz/chromium and use puppeteer-core, or set PUPPETEER_EXECUTABLE_PATH.",
+          },
+          { status: 500 },
+        );
+      }
+      throw err;
+    }
     const page = await browser.newPage();
     if (cookies.length > 0) {
       try {
