@@ -94,7 +94,7 @@ export function RoleBasedNavigation() {
       setCurrentUser(user);
 
       if (user) {
-        const role = await RoleAuthService.getUserRole(user.id, user.email!);
+        const role = await RoleAuthService.getUserRole(supabase, user.id);
         setUserRole(role);
       }
     } catch (error) {

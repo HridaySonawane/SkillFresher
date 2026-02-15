@@ -6,7 +6,7 @@ import type React from "react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import { getStripe } from "@/lib/stripe/stripe-config";
+import { getStripe } from "@/lib/stripe/stripe-client";
 
 interface CheckoutButtonProps {
   priceId: string;

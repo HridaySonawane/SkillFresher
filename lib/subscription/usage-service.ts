@@ -42,17 +42,15 @@ export class UsageService {
   static async incrementUsage(userId: string, usageType: "resumes" | "downloads" | "ai_optimizations"): Promise<void> {
     const currentPeriod = this.getCurrentPeriod()
 
-    await supabase.from("user_usage").upsert(
-      {
-        user_id: userId,
-        period_start: currentPeriod.start,
-        period_end: currentPeriod.end,
-        [`${usageType}_used`]: supabase.raw(`COALESCE(${usageType}_used, 0) + 1`),
-      },
-      {
-        onConflict: "user_id,period_start",
-      },
-    )
+    await supabase
+      .from("user_usage")
+      .update({
+        [`${usageType}_used`]: supabase.rpc("increment_usage", {
+          usage_type: usageType,
+        }),
+      })
+      .eq("user_id", userId)
+      .eq("period_start", currentPeriod.start)
   }
 
   static async getCurrentUsage(userId: string) {
@@ -85,15 +83,18 @@ export class UsageService {
     }
   }
 
-  private static async checkFreePlanLimits(userId: string, limitType: string): Promise<boolean> {
+  private static async checkFreePlanLimits(
+    userId: string,
+    limitType: "resumes" | "downloads" | "ai_optimizations",
+  ): Promise<boolean> {
     const usage = await this.getCurrentUsage(userId)
 
-    const freeLimits = {
+    const freeLimits: Record<"resumes" | "downloads" | "ai_optimizations", number> = {
       resumes: 1,
       downloads: 5,
       ai_optimizations: 3,
     }
 
-    return usage[`${limitType}_used`] < freeLimits[limitType]
+    return usage[`${limitType}_used` as keyof typeof usage] < freeLimits[limitType]
   }
 }

@@ -18,7 +18,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 
-export function TemplateGallery({ selectedCategory, setSelectedCategory }) {
+export function TemplateGallery({ selectedCategory, setSelectedCategory }: { selectedCategory: string; setSelectedCategory: (category: string) => void }) {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const [templates, setTemplates] = useState<any[]>([]);

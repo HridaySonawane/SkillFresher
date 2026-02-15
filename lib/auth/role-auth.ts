@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabase } from "@/lib/supabase/auth";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 export type UserRole = "user" | "admin" | "moderator" | "premium_user";
 
@@ -10,7 +12,7 @@ export interface Permission {
 
 export class RoleAuthService {
   // Get user's role
-  static async getUserRole(supabaseClient, userId: string) {
+  static async getUserRole(supabaseClient: SupabaseClient<any, "public", any>, userId: string) {
     try {
       console.log("Getting user role for user:", userId);
       const { data, error } = await supabaseClient
@@ -80,19 +82,19 @@ export class RoleAuthService {
 
   // Check if user is admin
   static async isAdmin(userId: string): Promise<boolean> {
-    const role = await this.getUserRole(userId);
+    const role = await this.getUserRole(supabase, userId);
     return role === "admin";
   }
 
   // Check if user is moderator
   static async isModerator(userId: string): Promise<boolean> {
-    const role = await this.getUserRole(userId);
+    const role = await this.getUserRole(supabase, userId);
     return role === "moderator" || role === "admin";
   }
 
   // Check if user is premium
   static async isPremium(userId: string): Promise<boolean> {
-    const role = await this.getUserRole(userId);
+    const role = await this.getUserRole(supabase, userId);
     return role === "premium_user" || role === "admin" || role === "moderator";
   }
 
@@ -240,7 +242,7 @@ export const useRoleAuth = () => {
   };
 
   const getUserRole = async (userId: string): Promise<UserRole | null> => {
-    return await RoleAuthService.getUserRole(userId);
+    return await RoleAuthService.getUserRole(supabase, userId);
   };
 
   const isAdmin = async (userId: string): Promise<boolean> => {

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -29,13 +30,14 @@ export function UsageIndicator({ userId }: { userId: string }) {
 
   const loadUsageData = async () => {
     try {
-      const [usageData, limitsData] = await Promise.all([
-        UsageService.getCurrentUsage(userId),
-        UsageService.getPlanLimits(userId),
-      ]);
+      const usageData = await UsageService.getCurrentUsage(userId);
 
       setUsage(usageData);
-      setLimits(limitsData);
+      setLimits({
+        max_resumes: null,
+        max_downloads_per_month: null,
+        ai_optimizations_per_month: null,
+      });
     } catch (error) {
       console.error("Failed to load usage data:", error);
     } finally {

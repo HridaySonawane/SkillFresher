@@ -42,7 +42,13 @@ const categories = [
   },
 ];
 
-export function TemplateCategories({ selectedCategory, setSelectedCategory }) {
+export function TemplateCategories({ 
+  selectedCategory, 
+  setSelectedCategory 
+}: { 
+  selectedCategory: string; 
+  setSelectedCategory: (category: string) => void;
+}) {
   // const [activeCategory, setActiveCategory] = useState("all");
 
   return (

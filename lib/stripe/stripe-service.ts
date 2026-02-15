@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { stripe } from "@/lib/stripe/stripe-server"
 import { supabase } from "@/lib/auth/supabase-client"
 
@@ -32,13 +33,14 @@ export class StripeService {
     })
 
     // Store subscription in database
+    const typedSubscription = subscription as any
     await supabase.from("user_subscriptions").insert({
       user_id: userId,
       stripe_subscription_id: subscription.id,
       stripe_customer_id: customerId,
       status: subscription.status,
-      current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-      current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+      current_period_start: new Date(typedSubscription.current_period_start * 1000).toISOString(),
+      current_period_end: new Date(typedSubscription.current_period_end * 1000).toISOString(),
     })
 
     return subscription
