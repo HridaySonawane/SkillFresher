@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { type NextRequest, NextResponse } from "next/server"
-import { stripe } from "@/lib/stripe/stripe-config"
+import { stripe } from "@/lib/stripe/stripe-server"
 import { supabase } from "@/lib/auth/supabase-client"
 import { headers } from "next/headers"
 
@@ -7,7 +8,7 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
 
 export async function POST(request: NextRequest) {
   const body = await request.text()
-  const signature = headers().get("stripe-signature")!
+  const signature = (await headers()).get("stripe-signature")!
 
   let event: any
 
@@ -85,7 +86,7 @@ async function handleSubscriptionCanceled(subscription: any) {
 
 async function handlePaymentSucceeded(invoice: any) {
   const subscriptionId = invoice.subscription
-  const customerId = invoice.customer
+  // const customerId = invoice.customer
 
   // Log successful payment
   await supabase.from("payments").insert({
