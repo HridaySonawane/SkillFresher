@@ -14,7 +14,9 @@ export default function BuilderLayout({
 	return (
 		<ResumeBuilderProvider>
 			<div className="min-h-screen bg-gray-50 dark:bg-gray-800">
-				<BuilderHeader />
+				<Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
+					<BuilderHeader />
+				</Suspense>
 				<div className="flex h-[calc(100vh-64px)]">
 					{/* Left Sidebar - Template Selection */}
 					<BuilderSidebar />
