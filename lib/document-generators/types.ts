@@ -30,3 +30,5 @@ export interface ResumeData {
   skills: string[];
   projects: string[];
 }
+
+export type Template = string;
