@@ -5,7 +5,7 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { templateId: string } }
 ) {
-  const { templateId } = await params;
+  const { templateId } = params;
   const { data, error } = await supabase
     .from("templates")
     .select("*")
