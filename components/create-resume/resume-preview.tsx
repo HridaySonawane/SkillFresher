@@ -60,28 +60,28 @@ export function ResumePreview({
     }
   };
 
-  const getStepMessage = () => {
-    switch (currentStep) {
-      case "template":
-        return {
-          title: "Choose Your Template",
-          description: "Select a professional template to get started",
-          icon: "🎨",
-        };
-      case "form":
-        return {
-          title: "Fill in Your Details",
-          description: "Add your information to see it appear here",
-          icon: "✏️",
-        };
-      case "preview":
-        return {
-          title: "Review Your Resume",
-          description: "Your resume is ready for download",
-          icon: "✅",
-        };
-    }
-  };
+  // const getStepMessage = () => {
+  //   switch (currentStep) {
+  //     case "template":
+  //       return {
+  //         title: "Choose Your Template",
+  //         description: "Select a professional template to get started",
+  //         icon: "🎨",
+  //       };
+  //     case "form":
+  //       return {
+  //         title: "Fill in Your Details",
+  //         description: "Add your information to see it appear here",
+  //         icon: "✏️",
+  //       };
+  //     case "preview":
+  //       return {
+  //         title: "Review Your Resume",
+  //         description: "Your resume is ready for download",
+  //         icon: "✅",
+  //       };
+  //   }
+  // };
 
   // const stepMessage = getStepMessage();
 
