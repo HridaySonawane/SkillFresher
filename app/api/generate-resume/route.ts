@@ -94,16 +94,6 @@ export async function GET(request: NextRequest) {
       defaultViewport: { width: 1280, height: 720 },
     };
 
-    if (process.env.PUPPETEER_EXECUTABLE_PATH) {
-      launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
-    } else {
-      try {
-        launchOptions.executablePath = await chromium.executablePath();
-      } catch (e) {
-        console.warn("Could not resolve chromium.executablePath():", e);
-      }
-    }
-
     let browser: any;
     try {
       browser = await puppeteer.launch(launchOptions);
