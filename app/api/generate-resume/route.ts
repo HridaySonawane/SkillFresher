@@ -1,11 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import puppeteer from "puppeteer";
-import { cookies as nextCookies } from "next/headers";
+// don't use next/headers here; build a request-scoped cookies wrapper below
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createRouteHandlerClient({cookies: ()=> nextCookies()});
+    // Parse cookie header once and build a small sync cookies wrapper
+    const cookieHeader = request.headers.get("cookie") || "";
+    const parsedPairs = cookieHeader
+      .split(";")
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .map((pair) => {
+        const idx = pair.indexOf("=");
+        const name = idx === -1 ? pair : pair.slice(0, idx);
+        const value = idx === -1 ? "" : pair.slice(idx + 1);
+        return { name, value: decodeURIComponent(value) };
+      });
+
+    const cookiesWrapper = {
+      get: (name: string) => {
+        const found = parsedPairs.find((p) => p.name === name);
+        return found ? { value: found.value } : undefined;
+      },
+      getAll: () => parsedPairs.map((p) => ({ name: p.name, value: p.value })),
+      set: () => {},
+      delete: () => {},
+    };
+
+    const supabase = createRouteHandlerClient({
+      cookies: () => cookiesWrapper as any,
+    });
     // 1. Get Supabase session for the current user
     const {
       data: { session },
@@ -19,29 +44,29 @@ export async function GET(request: NextRequest) {
     // 2. Get the URL to render
     const url = request.nextUrl.searchParams.get("url");
     if (!url) {
-      return NextResponse.json({ error: "Missing url parameter" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing url parameter" },
+        { status: 400 },
+      );
     }
 
-    // 3. Parse cookies from the request and set them in Puppeteer
-    const cookieHeader = request.headers.get("cookie") || "";
-    const cookies = cookieHeader
-      .split(";")
-      .map(cookieStr => {
-        const [name, ...rest] = cookieStr.trim().split("=");
-        return {
-          name,
-          value: rest.join("="),
-          domain: "localhost", // Change to your domain in production
-          path: "/"
-        };
-      })
-      .filter(cookie => cookie.name && cookie.value);
+    // 3. Build Puppeteer cookie objects from parsed pairs
+    const cookies = parsedPairs
+      .map((p) => ({ name: p.name, value: p.value, path: "/" }))
+      .filter((c) => c.name && c.value);
 
     // 4. Launch Puppeteer and set cookies
     const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
     const page = await browser.newPage();
     if (cookies.length > 0) {
-      await browser.setCookie(...cookies);
+      try {
+        const urlObj = new URL(url);
+        const hostname = urlObj.hostname;
+        const normalized = cookies.map((c) => ({ ...c, domain: hostname }));
+        await page.setCookie(...normalized);
+      } catch (err) {
+        console.warn("Could not set cookies for Puppeteer page:", err);
+      }
     }
 
     // 5. Go to the preview page as the authenticated user
@@ -60,6 +85,9 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error generating PDF:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
