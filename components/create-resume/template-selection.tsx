@@ -91,11 +91,11 @@ export function TemplateSelection({
           feature.toLowerCase().includes(searchTerm.toLowerCase()),
         ) ||
         // Search in industry array
-        (template.industry || []).some((industry) =>
+        (template.industry || []).some((industry: string) =>
           industry.toLowerCase().includes(searchTerm.toLowerCase()),
         ) ||
         // Search in experience_level array
-        (template.experience_level || []).some((level) =>
+        (template.experience_level || []).some((level: string) =>
           level.toLowerCase().includes(searchTerm.toLowerCase()),
         );
       const matchesCategory =
