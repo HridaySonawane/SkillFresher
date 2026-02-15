@@ -3,9 +3,10 @@ import { supabase } from "@/lib/supabase/auth";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { templateId: string } }
+  { params }: { params: Promise<{ templateId: string }> },
 ) {
-  const { templateId } = params;
+  const { templateId } = await params;
+
   const { data, error } = await supabase
     .from("templates")
     .select("*")
@@ -15,5 +16,6 @@ export async function GET(
   if (error || !data) {
     return NextResponse.json({ error: "Template not found" }, { status: 404 });
   }
+
   return NextResponse.json(data);
-} 
+}
