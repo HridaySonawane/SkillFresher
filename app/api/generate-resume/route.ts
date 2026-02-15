@@ -4,29 +4,32 @@ import { NextRequest, NextResponse } from "next/server";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import puppeteer from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
-// don't use next/headers here; build a request-scoped cookies wrapper below
 
 export async function GET(request: NextRequest) {
   try {
-    // Parse cookie header once and build a small sync cookies wrapper
+    /* =========================================================
+       1️⃣ Parse Cookies From Request
+    ========================================================== */
+
     const cookieHeader = request.headers.get("cookie") || "";
-    const parsedPairs = cookieHeader
+
+    const parsedCookies = cookieHeader
       .split(";")
-      .map((s) => s.trim())
+      .map((c) => c.trim())
       .filter(Boolean)
       .map((pair) => {
-        const idx = pair.indexOf("=");
-        const name = idx === -1 ? pair : pair.slice(0, idx);
-        const value = idx === -1 ? "" : pair.slice(idx + 1);
+        const index = pair.indexOf("=");
+        const name = pair.substring(0, index);
+        const value = pair.substring(index + 1);
         return { name, value: decodeURIComponent(value) };
       });
 
     const cookiesWrapper = {
       get: (name: string) => {
-        const found = parsedPairs.find((p) => p.name === name);
+        const found = parsedCookies.find((c) => c.name === name);
         return found ? { value: found.value } : undefined;
       },
-      getAll: () => parsedPairs.map((p) => ({ name: p.name, value: p.value })),
+      getAll: () => parsedCookies,
       set: () => {},
       delete: () => {},
     };
@@ -34,18 +37,26 @@ export async function GET(request: NextRequest) {
     const supabase = createRouteHandlerClient({
       cookies: () => cookiesWrapper as any,
     });
-    // 1. Get Supabase session for the current user
+
+    /* =========================================================
+       2️⃣ Verify Supabase Session
+    ========================================================== */
+
     const {
       data: { session },
-      error: authError,
+      error,
     } = await supabase.auth.getSession();
 
-    if (authError || !session) {
+    if (error || !session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 2. Get the URL to render
+    /* =========================================================
+       3️⃣ Get Target URL
+    ========================================================== */
+
     let url = request.nextUrl.searchParams.get("url");
+
     if (!url) {
       return NextResponse.json(
         { error: "Missing url parameter" },
@@ -53,117 +64,76 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // If a developer passed a localhost URL while running on Vercel, rewrite it
-    // to the deployed URL (VERCEL_URL) so the server process can reach it.
-    try {
-      const parsed = new URL(url);
-      const isLocalhost = ["localhost", "127.0.0.1", "0.0.0.0"].includes(
-        parsed.hostname,
-      );
-      if (isLocalhost) {
-        const vercelHost = "skill-fresher.vercel.app";
-        if (vercelHost) {
-          parsed.hostname = vercelHost;
-          // enforce https in production on Vercel
-          parsed.protocol = "https:";
-          url = parsed.toString();
-        } else {
-          // In production, a localhost target is not reachable from Vercel
-          return NextResponse.json(
-            {
-              error:
-                "URL points to localhost which is not reachable from production server",
-            },
-            { status: 400 },
-          );
-        }
-      }
-    } catch (e) {
-      // ignore invalid URL here; later navigation will fail with clearer message
+    // Replace localhost with production domain if needed
+    const parsedUrl = new URL(url);
+
+    if (["localhost", "127.0.0.1", "0.0.0.0"].includes(parsedUrl.hostname)) {
+      parsedUrl.hostname = request.headers.get("host")!;
+      parsedUrl.protocol = "https:";
+      url = parsedUrl.toString();
     }
 
-    // 3. Build Puppeteer cookie objects from parsed pairs
-    const cookies = parsedPairs
-      .map((p) => ({ name: p.name, value: p.value, path: "/" }))
-      .filter((c) => c.name && c.value);
+    /* =========================================================
+       4️⃣ Launch Puppeteer (Correct Production Setup)
+    ========================================================== */
 
-    // 4. Launch Puppeteer and set cookies (use puppeteer-core + @sparticuz/chromium on Vercel)
-    const launchOptions: any = {
-      headless: true,
+    const browser = await puppeteer.launch({
       args: chromium.args,
       defaultViewport: { width: 1280, height: 720 },
-    };
 
-    let browser: any;
-    try {
-      browser = await puppeteer.launch(launchOptions);
-    } catch (err: any) {
-      console.error("Puppeteer launch failed:", err?.message || err);
-      // Try connecting to a remote browser service if provided (Browserless, etc.)
-      const remoteEndpoint =
-        process.env.BROWSERLESS_WS_ENDPOINT || process.env.BROWSERLESS_URL;
-      if (remoteEndpoint) {
-        try {
-          browser = await puppeteer.connect({
-            browserWSEndpoint: remoteEndpoint,
-          });
-          console.info("Connected to remote browser endpoint");
-        } catch (connectErr: any) {
-          console.error(
-            "Failed to connect to remote browser:",
-            connectErr?.message || connectErr,
-          );
-          return NextResponse.json(
-            {
-              error: "Browser launch and remote connect both failed",
-              launchError: String(err?.message || err),
-              connectError: String(connectErr?.message || connectErr),
-            },
-            { status: 500 },
-          );
-        }
-      } else {
-        // No remote fallback configured — return detailed error to help debugging
-        return NextResponse.json(
-          {
-            error:
-              "Chromium not found or failed to launch. On Vercel use @sparticuz/chromium with puppeteer-core, set PUPPETEER_EXECUTABLE_PATH, or configure a remote browser.",
-            detail: String(err?.message || err),
-          },
-          { status: 500 },
-        );
-      }
-    }
+      executablePath: await chromium.executablePath(),
+      headless: true,
+    });
+
     const page = await browser.newPage();
-    if (cookies.length > 0) {
-      try {
-        const urlObj = new URL(url);
-        const hostname = urlObj.hostname;
-        const normalized = cookies.map((c) => ({ ...c, domain: hostname }));
-        await page.setCookie(...normalized);
-      } catch (err) {
-        console.warn("Could not set cookies for Puppeteer page:", err);
-      }
+
+    /* =========================================================
+       5️⃣ Set Cookies In Browser Context
+    ========================================================== */
+
+    if (parsedCookies.length > 0) {
+      const hostname = new URL(url).hostname;
+
+      await page.setCookie(
+        ...parsedCookies.map((c) => ({
+          name: c.name,
+          value: c.value,
+          domain: hostname,
+          path: "/",
+        })),
+      );
     }
 
-    // 5. Go to the preview page as the authenticated user
-    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+    /* =========================================================
+       6️⃣ Navigate & Generate PDF
+    ========================================================== */
 
-    // 6. Generate the PDF
-    const pdfBuffer = await page.pdf({ format: "A4", printBackground: true });
+    await page.goto(url, {
+      waitUntil: "networkidle0",
+      timeout: 60000,
+    });
+
+    const pdfBuffer = await page.pdf({
+      format: "A4",
+      printBackground: true,
+    });
+
     await browser.close();
 
-    // 7. Return the PDF
+    /* =========================================================
+       7️⃣ Return PDF
+    ========================================================== */
+
     return new NextResponse(pdfBuffer, {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": "attachment; filename=resume.pdf",
       },
     });
-  } catch (error) {
-    console.error("Error generating PDF:", error);
+  } catch (err) {
+    console.error("PDF generation error:", err);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Internal Server Error" },
       { status: 500 },
     );
   }
